@@ -45,7 +45,7 @@ jobs:
       uses: mshick/add-pr-comment@v2
       with:
         message: |
-          ### 📊 Test Coverage Results (Node ${{ matrix.node-version }})
+          ### Test Coverage Results (Node ${{ matrix.node-version }})
           
           <details>
           <summary>Click to view full coverage table</summary>
