@@ -5,12 +5,12 @@ describe("Math.js test", () => {
         expect(add(2, 2)).toBe(4);
     });
     it("should tess substract ", () => {
-        expect(add(2, 2)).toBe(0);
+        expect(substract(2, 2)).toBe(0);
     });
     it("should tess divide ", () => {
-        expect(add(2, 2)).toBe(1);
+        expect(divide(2, 2)).toBe(1);
     });
     it("should tess multiply ", () => {
-        expect(add(2, 2)).toBe(4);
+        expect(multiply(2, 2)).toBe(4);
     });
 });
