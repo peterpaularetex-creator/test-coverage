@@ -19,7 +19,7 @@ jobs: #top-level container that groups the tasks this workflow will run
       - name: Create PR using GitHub CLI
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TEST_BRANCH: "test"
+          TEST_BRANCH: "deploy"
           # ASSIGNEE_USER: "peterpaularetex-creator" 
           REVIEWER_1: "peterpaularetex-creator"
           REVIEWER_2: "Aaron-anime"
