@@ -8,6 +8,7 @@ on:
 
 jobs: #top-level container that groups the tasks this workflow will run
   create-pull-request: #unique identifier I've given to this specific job
+    if: github.event.created == true
     runs-on: ubuntu-latest #specifies the runner to use
     permissions: #this defines what the automated GITHUB_TOKEN is allowed to do
       pull-requests: write #allows job to create and edit PRs.
@@ -19,7 +20,7 @@ jobs: #top-level container that groups the tasks this workflow will run
       - name: Create PR using GitHub CLI
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TEST_BRANCH: "deploy"
+          TEST_BRANCH: "test"
           # ASSIGNEE_USER: "peterpaularetex-creator" 
           REVIEWER_1: "peterpaularetex-creator"
           REVIEWER_2: "Aaron-anime"
