@@ -4,29 +4,58 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    permissions:
+      pull-requests: write
+      contents: read
     strategy:
       matrix:
-        node-version: [20.x, 21.x, 22.x, 23.x, 24.x]
+        node-version: [20.x, 22.x]
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 2
 
     - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
+        cache: npm
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
-    - name: Run tests
-      run: npm run test
+    - name: Run tests and capture output
+      run: |
+        set -o pipefail
+        npm test -- --coverage | tee ./test-results.txt
+
+    - name: Read test results
+      id: test_data
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "results<<EOF" >> $GITHUB_OUTPUT
+        cat ./test-results.txt >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Post Test Results to PR
+      if: github.event_name == 'pull_request' && matrix.node-version == '22.x'
+      uses: mshick/add-pr-comment@v2
+      with:
+        message: |
+          ### 📊 Test Coverage Results (Node ${{ matrix.node-version }})
+          
+          <details>
+          <summary>Click to view full coverage table</summary>
+
+          ```text
+          ${{ steps.test_data.outputs.results }}
+          ```
+          
+          </details>
+        allow-repeats: false
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
